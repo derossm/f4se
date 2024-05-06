@@ -35,3 +35,4 @@ scripts/merged
 
 # cmake
 build/*
+/f4se/x64/Debug
