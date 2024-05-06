@@ -43,8 +43,8 @@ namespace PlatformAdapter
 					BSFixedString typeName = objectType->m_typeName;
 
 					root->CreateObject(dest);
-					dest->SetMember("__handleHigh__", &GFxValue((UInt32)(handle >> 32)));
-					dest->SetMember("__handleLow__", &GFxValue((UInt32)(handle & 0xFFFFFFFF)));
+					dest->SetMember("__handleHigh__", GFxValue((UInt32)(handle >> 32)));
+					dest->SetMember("__handleLow__", GFxValue((UInt32)(handle & 0xFFFFFFFF)));
 
 					GFxValue type;
 					root->CreateString(&type, typeName.c_str());

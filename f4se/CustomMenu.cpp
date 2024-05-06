@@ -31,9 +31,9 @@ void LoadCustomMenu_Hook(IMenu * menu)
 
 		if (CALL_MEMBER_FN((*g_scaleformManager), LoadMovie)(menu, menu->movie, menuPath.c_str(), rootPath.c_str(), movieFlags))
 		{
-			menu->stage.SetMember("menuFlags", &GFxValue(menu->flags));
-			menu->stage.SetMember("movieFlags", &GFxValue(movieFlags));
-			menu->stage.SetMember("extendedFlags", &GFxValue(extFlags));
+			menu->stage.SetMember("menuFlags", GFxValue(menu->flags));
+			menu->stage.SetMember("movieFlags", GFxValue(movieFlags));
+			menu->stage.SetMember("extendedFlags", GFxValue(extFlags));
 
 			GameMenuBase * gameMenu = static_cast<GameMenuBase*>(menu);
 

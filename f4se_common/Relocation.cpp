@@ -1,3 +1,5 @@
+#include "common/stdafx.h"
+
 #include "Relocation.h"
 
 // the goal of this file is to support pointers in to a relocated binary with as little runtime overhead, code bloat, and hassle as possible
@@ -26,5 +28,5 @@ uintptr_t RelocationManager::s_baseAddr = 0;
 
 RelocationManager::RelocationManager()
 {
-	s_baseAddr = reinterpret_cast<uintptr_t>(GetModuleHandle(NULL));
+	s_baseAddr = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
 }

@@ -486,8 +486,8 @@ struct IsArrayType<VMArray<T>>
 	typedef T TypedArg;
 };
 
-template <typename T>
-UInt64 GetTypeID <T>(VirtualMachine * vm)
+template<typename T>
+UInt64 GetTypeID(VirtualMachine* vm)
 {
 	UInt64		result;
 

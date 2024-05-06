@@ -3,7 +3,7 @@
 #include <string>
 #include "f4se_loader_common/LoaderError.h"
 
-std::string GetRegKey(HKEY root, const char * path, char * value)
+std::string GetRegKey(HKEY root, const char * path, const char * value)
 {
 	std::string	result;
 	HKEY		key;

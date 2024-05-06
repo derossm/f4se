@@ -1,6 +1,7 @@
+#include "common/stdafx.h"
+
 #include "BranchTrampoline.h"
 #include "SafeWrite.h"
-#include <climits>
 
 BranchTrampoline g_branchTrampoline;
 BranchTrampoline g_localTrampoline;

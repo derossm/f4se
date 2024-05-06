@@ -1,3 +1,5 @@
+#include "common\stdafx.h"
+
 #include "f4se_common/f4se_version.h"
 #include "f4se_common/Utilities.h"
 #include "f4se_common/Relocation.h"

@@ -19,14 +19,14 @@ public:
 class TranslationTableItem
 {
 public:
-	BSFixedString	key;
-	BSFixedStringW	translation;
+	BSFixedString key;
+	BSFixedStringW translation;
 
 	TranslationTableItem(BSFixedString a_key, BSFixedStringW a_translation)
 		: key(a_key), translation(a_translation) {}
 
-	bool operator==(const BSFixedString & a_name) const	{ return key == a_name; }
-	operator BSFixedString() const								{ return key; }
+	bool operator==(const BSFixedString& a_name) const { return key == a_name; }
+	operator BSFixedString() const { return key; }
 
 	static inline UInt32 GetHash(BSFixedString * key)
 	{

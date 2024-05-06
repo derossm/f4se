@@ -25,10 +25,10 @@ void StringCache::Ref::Release()
 	CALL_MEMBER_FN(this, Release)();
 }
 
-bool StringCache::Ref::operator==(const char * lhs) const
+bool StringCache::Ref::operator==(const char* lhs) const
 {
 	Ref tmp(lhs);
-	bool res = data == tmp.data;
+	bool res{data == tmp.data};
 	CALL_MEMBER_FN(&tmp, Release)();
 	return res;
 }

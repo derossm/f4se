@@ -305,8 +305,8 @@ public:
 			args->movie->movieRoot->CreateObject(&date, "Date", params, 7);
 			fileInfo.SetMember("creationDate", &date);
 
-			fileInfo.SetMember("isDirectory", &GFxValue((fileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY));
-			fileInfo.SetMember("isHidden", &GFxValue((fileData->dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == FILE_ATTRIBUTE_HIDDEN));
+			fileInfo.SetMember("isDirectory", GFxValue((fileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY));
+			fileInfo.SetMember("isHidden", GFxValue((fileData->dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == FILE_ATTRIBUTE_HIDDEN));
 			args->result->PushBack(&fileInfo);
 		}
 	}
@@ -425,9 +425,10 @@ public:
 				auto imageLoader = (*g_scaleformManager)->imageLoader;
 				if(imageLoader)
 				{
-					for(auto & texture : it->second)
+					for(auto& texture : it->second)
 					{
-						imageLoader->UnmountImage(&const_cast<NiTexture*>(texture));
+						auto* img{const_cast<NiTexture*>(texture)};
+						imageLoader->UnmountImage(&img);
 						texture->DecRef();
 					}
 				}
@@ -469,10 +470,10 @@ void ScaleformInitHook_Install(GFxMovieView * view)
 	
 	GFxValue	version;
 	movieRoot->CreateObject(&version);
-	version.SetMember("major", &GFxValue(F4SE_VERSION_INTEGER));
-	version.SetMember("minor", &GFxValue(F4SE_VERSION_INTEGER_MINOR));
-	version.SetMember("beta", &GFxValue(F4SE_VERSION_INTEGER_BETA));
-	version.SetMember("releaseIdx", &GFxValue(F4SE_VERSION_RELEASEIDX));
+	version.SetMember("major", GFxValue(F4SE_VERSION_INTEGER));
+	version.SetMember("minor", GFxValue(F4SE_VERSION_INTEGER_MINOR));
+	version.SetMember("beta", GFxValue(F4SE_VERSION_INTEGER_BETA));
+	version.SetMember("releaseIdx", GFxValue(F4SE_VERSION_RELEASEIDX));
 	f4se.SetMember("version", &version);
 
 	// plugins

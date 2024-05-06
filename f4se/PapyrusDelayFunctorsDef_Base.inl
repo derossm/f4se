@@ -2,39 +2,39 @@
 #error PapyrusDelayFunctorsDef: too many params
 #endif
 
-template <const char* T_functorName, void * T_runFunc, typename T_Base
+template<const char* T_functorName, auto* T_runFunc, typename T_Base
 #if !VOID_SPEC
 	, typename T_Result
 #endif
 #if NUM_PARAMS >= 1
-	,typename T_Arg0
+	, typename T_Arg0
 #endif
 #if NUM_PARAMS >= 2
-	,typename T_Arg1
+	, typename T_Arg1
 #endif
 #if NUM_PARAMS >= 3
-	,typename T_Arg2
+	, typename T_Arg2
 #endif
 #if NUM_PARAMS >= 4
-	,typename T_Arg3
+	, typename T_Arg3
 #endif
 #if NUM_PARAMS >= 5
-	,typename T_Arg4
+	, typename T_Arg4
 #endif
 #if NUM_PARAMS >= 6
-	,typename T_Arg5
+	, typename T_Arg5
 #endif
 #if NUM_PARAMS >= 7
-	,typename T_Arg6
+	, typename T_Arg6
 #endif
 #if NUM_PARAMS >= 8
-	,typename T_Arg7
+	, typename T_Arg7
 #endif
 #if NUM_PARAMS >= 9
-	,typename T_Arg8
+	, typename T_Arg8
 #endif
 #if NUM_PARAMS >= 10
-	,typename T_Arg9
+	, typename T_Arg9
 #endif
 >
 
@@ -76,14 +76,13 @@ class CLASS_NAME
 	: public LatentF4SEDelayFunctor
 {
 public:
-	typedef
+	using CallbackType =
 #if VOID_SPEC
 		void
 #else
 		T_Result
 #endif
-		(* CallbackType)(UInt32 stackId,
-		T_Base * base
+		(*)(UInt32 stackId, T_Base* base
 #if NUM_PARAMS >= 1
 		, T_Arg0 arg0
 #endif
@@ -117,8 +116,7 @@ public:
 		);
 
 	// Function passed to Class isn't actually kept by the object, it's used to verify parameters author-end
-	explicit CLASS_NAME(CallbackType func, VirtualMachine * vm, UInt32 stackId, 
-		T_Base * base
+	explicit CLASS_NAME(CallbackType func, VirtualMachine* vm, UInt32 stackId, T_Base* base
 #if NUM_PARAMS >= 1
 		, T_Arg0 arg0
 #endif
@@ -149,9 +147,9 @@ public:
 #if NUM_PARAMS >= 10
 		, T_Arg9 arg9
 #endif
-		) : LatentF4SEDelayFunctor( stackId )
+		) : LatentF4SEDelayFunctor(stackId)
 	{
-		if (! IsStaticType <T_Base>::value)
+		if (!IsStaticType<T_Base>::value)
 		{
 			PackValue(&_base, &base, vm);
 		}
@@ -187,7 +185,7 @@ public:
 		PackValue(&_arg9, &arg9, vm);
 #endif
 	}
-	explicit CLASS_NAME(SerializationTag tag) : LatentF4SEDelayFunctor( tag ) {}
+	explicit CLASS_NAME(SerializationTag tag) : LatentF4SEDelayFunctor(tag) {}
 
 	virtual const char* ClassName() const override		{ return T_functorName; }
 	virtual UInt32		ClassVersion() const override	{ return 1; }
@@ -197,53 +195,77 @@ public:
 		using namespace Serialization;
 
 		if(!LatentF4SEDelayFunctor::Save(intfc))
+		{
 			return false;
+		}
 
-		if (! IsStaticType <T_Base>::value)
+		if (!IsStaticType<T_Base>::value)
 		{
 			if(!WriteVMData(intfc, &_base))
+			{
 				return false;
+			}
 		}
 
 #if NUM_PARAMS >= 1
 		if(!WriteVMData(intfc, &_arg0))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 2
 		if(!WriteVMData(intfc, &_arg1))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 3
 		if(!WriteVMData(intfc, &_arg2))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 4
 		if(!WriteVMData(intfc, &_arg3))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 5
 		if(!WriteVMData(intfc, &_arg4))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 6
 		if(!WriteVMData(intfc, &_arg5))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 7
 		if(!WriteVMData(intfc, &_arg6))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 8
 		if(!WriteVMData(intfc, &_arg7))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 9
 		if(!WriteVMData(intfc, &_arg8))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 10
 		if(!WriteVMData(intfc, &_arg9))
+		{
 			return false;
+		}
 #endif
 
 		return true;
@@ -254,53 +276,77 @@ public:
 		using namespace Serialization;
 
 		if(!LatentF4SEDelayFunctor::Load(intfc, version))
+		{
 			return false;
+		}
 
-		if (! IsStaticType <T_Base>::value)
+		if (!IsStaticType<T_Base>::value)
 		{
 			if(!ReadVMData(intfc, &_base))
+			{
 				return false;
+			}
 		}
 
 #if NUM_PARAMS >= 1
 		if(!ReadVMData(intfc, &_arg0))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 2
 		if(!ReadVMData(intfc, &_arg1))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 3
 		if(!ReadVMData(intfc, &_arg2))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 4
 		if(!ReadVMData(intfc, &_arg3))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 5
 		if(!ReadVMData(intfc, &_arg4))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 6
 		if(!ReadVMData(intfc, &_arg5))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 7
 		if(!ReadVMData(intfc, &_arg6))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 8
 		if(!ReadVMData(intfc, &_arg7))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 9
 		if(!ReadVMData(intfc, &_arg8))
+		{
 			return false;
+		}
 #endif
 #if NUM_PARAMS >= 10
 		if(!ReadVMData(intfc, &_arg9))
+		{
 			return false;
+		}
 #endif
 
 		return true;
@@ -308,59 +354,62 @@ public:
 
 	virtual bool Run(VMValue& resultValue) override
 	{
-		T_Base	* base = NULL;
+		T_Base* base{nullptr};
 
 		// extract base object pointer for non-static types
-		if (! IsStaticType <T_Base>::value)
+		if (!IsStaticType<T_Base>::value)
 		{
 			UnpackValue(&base, &_base);
-			if (!base) return false;
+			if (!base)
+			{
+				return false;
+			}
 		}
 
 		// extract parameters
 #if NUM_PARAMS >= 1
-		T_Arg0	arg0;
+		T_Arg0 arg0;
 		UnpackValue(&arg0, &_arg0);
 #endif
 #if NUM_PARAMS >= 2
-		T_Arg1	arg1;
+		T_Arg1 arg1;
 		UnpackValue(&arg1, &_arg1);
 #endif
 #if NUM_PARAMS >= 3
-		T_Arg2	arg2;
+		T_Arg2 arg2;
 		UnpackValue(&arg2, &_arg2);
 #endif
 #if NUM_PARAMS >= 4
-		T_Arg3	arg3;
+		T_Arg3 arg3;
 		UnpackValue(&arg3, &_arg3);
 #endif
 #if NUM_PARAMS >= 5
-		T_Arg4	arg4;
+		T_Arg4 arg4;
 		UnpackValue(&arg4, &_arg4);
 #endif
 #if NUM_PARAMS >= 6
-		T_Arg5	arg5;
+		T_Arg5 arg5;
 		UnpackValue(&arg5, &_arg5);
 #endif
 #if NUM_PARAMS >= 7
-		T_Arg6	arg6;
+		T_Arg6 arg6;
 		UnpackValue(&arg6, &_arg6);
 #endif
 #if NUM_PARAMS >= 8
-		T_Arg7	arg7;
+		T_Arg7 arg7;
 		UnpackValue(&arg7, &_arg7);
 #endif
 #if NUM_PARAMS >= 9
-		T_Arg8	arg8;
+		T_Arg8 arg8;
 		UnpackValue(&arg8, &_arg8);
 #endif
 #if NUM_PARAMS >= 10
-		T_Arg9	arg9;
+		T_Arg9 arg9;
 		UnpackValue(&arg9, &_arg9);
 #endif
 
 #if !VOID_SPEC
-		T_Result	result =
+		T_Result result =
 #endif
 			((CallbackType)T_runFunc)(stackId_, base
 #if NUM_PARAMS >= 1
@@ -401,10 +450,11 @@ public:
 #else
 		PackValue(&resultValue, &result, (*g_gameVM)->m_virtualMachine);
 #endif
-		if (! IsStaticType <T_Base>::value)
+		if (!IsStaticType<T_Base>::value)
 		{
 			DestroyValue(&base);
 		}
+
 		return true;
 	}
 

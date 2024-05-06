@@ -130,7 +130,7 @@ namespace papyrusObjectMod
 	void SetMaxRank(BGSMod::Attachment::Mod * thisMod, UInt32 nuDamage)
 	{
 		if(thisMod) {
-			thisMod->maxRank = max(0, min(nuDamage, 0xFF));
+			thisMod->maxRank = std::max(0ul, std::min(nuDamage, 0xFFul));
 		}
 	}
 
@@ -142,7 +142,7 @@ namespace papyrusObjectMod
 	void SetPriority(BGSMod::Attachment::Mod * thisMod, UInt32 nuDamage)
 	{
 		if(thisMod) {
-			thisMod->priority = max(0, min(nuDamage, 0xFF));
+			thisMod->priority = std::max(0ul, std::min(nuDamage, 0xFFul));
 		}
 	}
 

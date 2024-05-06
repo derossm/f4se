@@ -373,6 +373,8 @@ public:
 		UInt32	unk08;	// 08
 		UInt32	unk0C;	// 0C
 
+		bool operator==(const TaggedEntry& rhs) const { return form == rhs.form; }
+
 		operator TESForm *() const					{ return form; }
 
 		static inline UInt32 GetHash(TESForm ** key)

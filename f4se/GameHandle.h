@@ -5,206 +5,127 @@ class TESObjectREFR;
 #include "f4se_common/Relocation.h"
 #include "f4se/NiTypes.h"
 
-typedef bool(*_CreateHandleByREFR)(UInt32 & handleOut, const TESObjectREFR * ref);
-extern RelocAddr <_CreateHandleByREFR> CreateHandleByREFR;
+using _CreateHandleByREFR = bool(*)(UInt32& handleOut, const TESObjectREFR* ref);
+extern RelocAddr<_CreateHandleByREFR> CreateHandleByREFR;
 
-typedef bool(*_LookupREFRByHandle)(const UInt32 & handleIn, NiPointer<TESObjectREFR>& ref);
-extern RelocAddr <_LookupREFRByHandle> LookupREFRByHandle;
+using _LookupREFRByHandle = bool(*)(const UInt32& handleIn, NiPointer<TESObjectREFR>& ref);
+extern RelocAddr<_LookupREFRByHandle> LookupREFRByHandle;
 
-extern RelocPtr <UInt32> g_invalidRefHandle;
+extern RelocPtr<UInt32> g_invalidRefHandle;
 
-template <UInt32 INDEX_BITS = 20, UInt32 FLAG_BITS = 6>
+template<UInt32 INDEX_BITS = 20, UInt32 FLAG_BITS = 6>
 class BSUntypedPointerHandle
 {
 public:
-	typedef UInt32 value_type;
+	using value_type = UInt32;
 
+	BSUntypedPointerHandle() noexcept = default;
 
-	BSUntypedPointerHandle() :
-		_handle(0)
-	{
-		_handle = get_null_handle();
-	}
+	BSUntypedPointerHandle(const BSUntypedPointerHandle&) noexcept = default;
+	BSUntypedPointerHandle& operator=(const BSUntypedPointerHandle&) noexcept = default;
 
+	BSUntypedPointerHandle(BSUntypedPointerHandle&&) noexcept = default;
+	BSUntypedPointerHandle& operator=(BSUntypedPointerHandle&&) noexcept = default;
 
-	BSUntypedPointerHandle(const BSUntypedPointerHandle& a_rhs) :
-		_handle(a_rhs._handle)
-	{}
+	BSUntypedPointerHandle(value_type handle) noexcept : _handle{handle} {}
+	BSUntypedPointerHandle& operator=(value_type rhs) noexcept { _handle = rhs; return *this; }
 
+	~BSUntypedPointerHandle() noexcept = default;
 
-	BSUntypedPointerHandle(BSUntypedPointerHandle&& a_rhs) :
-		_handle(std::move(a_rhs._handle))
-	{
-		a_rhs.reset();
-	}
+	[[nodiscard]] explicit operator bool() const noexcept { return has_value(); }
+	[[nodiscard]] operator UInt32&() noexcept { return _handle; }
+	[[nodiscard]] value_type value() const noexcept { return _handle; }
 
+	void reset() noexcept { _handle = get_null_handle(); }
 
-	BSUntypedPointerHandle(value_type a_handle) :
-		_handle(a_handle)
-	{}
+	[[nodiscard]] bool has_value() const noexcept { return _handle != get_null_handle(); }
 
+	[[nodiscard]] bool operator==(const BSUntypedPointerHandle& rhs) const noexcept { return value() == rhs.value(); }
+	[[nodiscard]] bool operator!=(const BSUntypedPointerHandle& rhs) const noexcept { return !(*this == rhs); }
 
-	~BSUntypedPointerHandle()
-	{
-		reset();
-	}
-
-
-	BSUntypedPointerHandle& operator=(const BSUntypedPointerHandle& a_rhs)
-	{
-		_handle = a_rhs._handle;
-		return *this;
-	}
-
-
-	BSUntypedPointerHandle& operator=(BSUntypedPointerHandle&& a_rhs)
-	{
-		_handle = std::move(a_rhs._handle);
-		a_rhs.reset();
-		return *this;
-	}
-
-
-	BSUntypedPointerHandle& operator=(value_type a_rhs)
-	{
-		_handle = a_rhs;
-		return *this;
-	}
-
-
-	operator bool() const
-	{
-		has_value();
-	}
-
-
-	bool has_value() const
-	{
-		return _handle != get_null_handle();
-	}
-
-
-	value_type value() const
-	{
-		return _handle;
-	}
-
-	operator UInt32&()
-	{
-		return _handle;
-	}
-
-
-	void reset()
-	{
-		_handle = get_null_handle();
-	}
-
-
-	friend bool operator==(const BSUntypedPointerHandle& a_lhs, const BSUntypedPointerHandle& a_rhs)
-	{
-		return a_lhs.value() == a_rhs.value();
-	}
-
-
-	friend bool operator!=(const BSUntypedPointerHandle& a_lhs, const BSUntypedPointerHandle& a_rhs)
-	{
-		return !(a_lhs == a_rhs);
-	}
+	[[nodiscard]] bool operator==(value_type rhs) const noexcept { return value() == rhs; }
+	[[nodiscard]] bool operator!=(value_type rhs) const noexcept { return !(*this == rhs); }
 
 private:
-	static UInt32 get_null_handle()
+	static UInt32 get_null_handle() noexcept
 	{
 		return *g_invalidRefHandle;
 	}
 
 	// members
-	UInt32 _handle;	 // 0
+	UInt32 _handle{get_null_handle()}; // 0
 };
 STATIC_ASSERT(sizeof(BSUntypedPointerHandle<>) == 0x4);
 
 template <class T, class Handle = BSUntypedPointerHandle<>>
-class BSPointerHandle : protected Handle
+class BSPointerHandle : public Handle
 {
 public:
-	typedef typename Handle::value_type native_handle_type;
+	using native_handle_type = typename Handle::value_type;
 
+	BSPointerHandle() noexcept = default;
+	BSPointerHandle(const BSPointerHandle&) noexcept = default;
+	BSPointerHandle(BSPointerHandle&&) noexcept = default;
 
-	BSPointerHandle() :
-		Handle()
-	{}
-
-
-	BSPointerHandle(const BSPointerHandle& a_rhs) :
-		Handle(a_rhs)
-	{}
-
-
-	BSPointerHandle(BSPointerHandle&& a_rhs) :
-		Handle(std::move(a_rhs))
-	{}
-
-
-	template <class Y>
-	explicit BSPointerHandle(const Y* a_rhs) :
-		Handle()
+	BSPointerHandle& operator=(const BSPointerHandle& rhs)
 	{
-		if (a_rhs && a_rhs->BSHandleRefObject::QRefCount() > 0) {
-			create(a_rhs);
-		}
-	}
-
-
-	template <class Y>
-	BSPointerHandle(const BSPointerHandle<Y, Handle>& a_rhs) :
-		Handle(a_rhs)
-	{}
-
-
-	template <class Y>
-	BSPointerHandle(BSPointerHandle<Y, Handle>&& a_rhs) :
-		Handle(std::move(a_rhs))
-	{}
-
-
-	BSPointerHandle& operator=(const BSPointerHandle& a_rhs)
-	{
-		Handle::operator=(a_rhs);
+		Handle::operator=(rhs);
 		return *this;
 	}
 
-
-	BSPointerHandle& operator=(BSPointerHandle&& a_rhs)
+	BSPointerHandle& operator=(BSPointerHandle&& rhs)
 	{
-		Handle::operator=(std::move(a_rhs));
+		Handle::operator=(std::move(rhs));
 		return *this;
 	}
 
+	~BSPointerHandle() noexcept = default;
+
+	template<class Y>
+	explicit BSPointerHandle(const Y* rhs)
+		: Handle()
+	{
+		if (rhs && rhs->BSHandleRefObject::QRefCount() > 0)
+		{
+			create(rhs);
+		}
+	}
+
+	template<class Y>
+	BSPointerHandle(const BSPointerHandle<Y, Handle>& rhs)
+		: Handle(rhs)
+	{
+	}
 
 	template <class Y>
-	BSPointerHandle& operator=(const Y* a_rhs)
+	BSPointerHandle(BSPointerHandle<Y, Handle>&& rhs)
+		: Handle(std::move(rhs))
 	{
-		if (a_rhs && a_rhs->handleRefObject.QRefCount() > 0) {
-			create(a_rhs);
+	}
+
+	template<class Y>
+	BSPointerHandle& operator=(const Y* rhs)
+	{
+		if (rhs && rhs->handleRefObject.QRefCount() > 0)
+		{
+			create(rhs);
 		}
-		else {
+		else
+		{
 			reset();
 		}
+
 		return *this;
 	}
 
-
-	template <class Y>
-	BSPointerHandle& operator=(const BSPointerHandle<Y, Handle>& a_rhs)
+	template<class Y>
+	BSPointerHandle& operator=(const BSPointerHandle<Y, Handle>& rhs)
 	{
-		Handle::operator=(static_cast<const Handle&>(a_rhs));
+		Handle::operator=(static_cast<const Handle&>(rhs));
 		return *this;
 	}
 
-	void reset()
-	{
-		Handle::reset();
-	}
+	void reset() { Handle::reset(); }
 
 	NiPointer<T> get() const
 	{
@@ -213,40 +134,22 @@ public:
 		return ptr;
 	}
 
+	native_handle_type native_handle() { return Handle::value(); }
 
-	native_handle_type native_handle()
-	{
-		return Handle::value();
-	}
+	operator bool() const { return Handle::has_value(); }
 
-
-	operator bool() const
-	{
-		return Handle::has_value();
-	}
-
-
-	friend bool operator==(const BSPointerHandle& a_lhs, const BSPointerHandle& a_rhs)
-	{
-		return static_cast<const Handle&>(a_lhs) == static_cast<const Handle&>(a_rhs);
-	}
-
-
-	friend bool operator!=(const BSPointerHandle& a_lhs, const BSPointerHandle& a_rhs)
-	{
-		return !(a_lhs == a_rhs);
-	}
+	bool operator==(const BSPointerHandle& rhs) const { return static_cast<const Handle&>(*this) == static_cast<const Handle&>(rhs); }
+	bool operator!=(const BSPointerHandle& rhs) const { return !(*this == rhs); }
 
 private:
-	void create(const T* a_ptr)
+	void create(const T* ptr)
 	{
-		CreateHandleByREFR(*this, a_ptr);
+		CreateHandleByREFR(*this, ptr);
 	}
 
-
-	bool lookup(NiPointer<T>& a_refPtr) const
+	bool lookup(NiPointer<T>& refPtr) const
 	{
-		return LookupREFRByHandle(*this, a_refPtr);
+		return LookupREFRByHandle(*this, refPtr);
 	}
 };
 
@@ -267,7 +170,7 @@ template <class T, class Manager = HandleManager>
 class BSPointerHandleManagerInterface
 {
 public:
-	typedef T value_type;
+	using value_type = T;
 };
 
 template <class T>

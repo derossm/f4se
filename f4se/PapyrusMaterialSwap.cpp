@@ -4,6 +4,7 @@
 #include "f4se/GameData.h"
 
 #include "f4se/PapyrusStruct.h"
+#include "f4se/PapyrusArgs.h"
 
 DECLARE_STRUCT(RemapData, "MatSwap");
 

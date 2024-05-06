@@ -147,6 +147,11 @@ bool GFxValue::HasMember(const char * name)
 	return CALL_MEMBER_FN(objectInterface, HasMember)(data.obj, name);
 }
 
+bool GFxValue::SetMember(const char* name, GFxValue&& value)
+{
+	return SetMember(name, &value);
+}
+
 bool GFxValue::SetMember(const char * name, GFxValue * value)
 {
 	return CALL_MEMBER_FN(objectInterface, SetMember)(data.obj, name, value, IsDisplayObject());

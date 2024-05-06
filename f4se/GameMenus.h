@@ -380,7 +380,7 @@ public:
 		BSFixedString	key;
 		PipboyValue		*value;
 
-		bool operator==(const BSFixedString & a_name) const { return key == a_name; }
+		bool operator==(const BSFixedString& a_name) const { return key == a_name; }
 		operator BSFixedString() const { return key; }
 
 		static inline UInt32 GetHash(BSFixedString * key)
@@ -408,8 +408,8 @@ public:
 	CallbackType	menuConstructor;	// 010
 	void			* unk18;			// 018
 
-	bool operator==(const MenuTableItem & rhs) const	{ return name == rhs.name; }
-	bool operator==(const BSFixedString a_name) const	{ return name == a_name; }
+	bool operator==(const MenuTableItem& rhs) const	{ return name == rhs.name; }
+	bool operator==(const BSFixedString& a_name) const	{ return name == a_name; }
 	operator UInt64() const								{ return (UInt64)name.data->Get<char>(); }
 
 	static inline UInt32 GetHash(BSFixedString * key)

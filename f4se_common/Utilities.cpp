@@ -1,5 +1,6 @@
+#include "common/stdafx.h"
+
 #include "Utilities.h"
-#include <string>
 
 std::string GetRuntimePath()
 {

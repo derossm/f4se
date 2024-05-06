@@ -158,7 +158,7 @@ public:
 		
 		void Release();
 
-		bool operator==(const char * lhs) const;
+		bool operator==(const char* lhs) const;
 		bool operator==(const Ref& lhs) const { return data == lhs.data; }
 		bool operator<(const Ref& lhs) const { return data < lhs.data; }
 
@@ -288,7 +288,7 @@ public:
 		Heap_Free(entries);																// Free the old block
 		entries = newBlock;																// Assign the new block
 		capacity = numEntries;															// Capacity is now the number of total entries in the block
-		count = min(capacity, count);													// Count stays the same, or is truncated to capacity
+		count = std::min(capacity, count);													// Count stays the same, or is truncated to capacity
 		return true;
 	}
 
@@ -727,7 +727,7 @@ public:
 	}
 
 	template <class Op>
-	void Visit(Op& op, _Node* prev = NULL) const {
+	void Visit(Op&& op, _Node* prev = nullptr) const {
 		const _Node* pCur = (prev) ? prev->next : Head();
 		bool bContinue = true;
 		while (pCur && bContinue) {
@@ -739,7 +739,7 @@ public:
 	}
 
 	template <class Op>
-	T * Find(Op& op) const
+	T * Find(Op&& op) const
 	{
 		const _Node* pCur = Head(); 
 
@@ -777,7 +777,7 @@ public:
 	}
 
 	template <class Op>
-	UInt32 CountIf(Op& op) const
+	UInt32 CountIf(Op&& op) const
 	{
 		UInt32 count = 0;
 		const _Node* pCur = Head();
@@ -834,7 +834,7 @@ public:
 	}
 
 	template <class Op>
-	SInt32 GetIndexOf(Op& op)
+	SInt32 GetIndexOf(Op&& op)
 	{
 		SInt32 idx = 0;
 		const _Node* pCur = Head();
@@ -866,7 +866,7 @@ public:
 		return Find(AcceptEqual(item)) != NULL;
 	}
 	
-	void	Dump(void)
+	void Dump()
 	{
 		_MESSAGE("tList:");
 		_MESSAGE("> count: %d", Count());
@@ -896,15 +896,13 @@ class tHashSet
 	class _Entry
 	{
 	public:
-		Item	item;
-		_Entry	* next;
+		Item item;
+		_Entry* next{nullptr};
 
-		_Entry() : next(NULL) {}
+		bool IsFree() const	{ return next == nullptr; }
+		void SetFree()		{ next = nullptr; }
 
-		bool	IsFree() const	{ return next == NULL; }
-		void	SetFree()		{ next = NULL; }
-
-		void	Dump(void)
+		void Dump()
 		{
 			item.Dump();
 			_MESSAGE("\t\tnext: %016I64X", next);
@@ -987,7 +985,7 @@ class tHashSet
 		_Entry * p = targetEntry;
 		do
 		{
-			if (p->item == *item)
+			if (p->item.operator==(*item))
 				return kInsert_Duplicate;
 			p = p->next;
 		}

@@ -23,7 +23,7 @@ void NiRefObject::DecRef(void)
 NiExtraData * NiObjectNET::GetExtraData(const BSFixedString & name)
 {
 	if(!m_extraData)
-		return false;
+		return nullptr;
 
 	SimpleLocker locker(&m_extraData->lock);
 	for(UInt32 i = 0; i < m_extraData->count; i++)

@@ -289,7 +289,7 @@ public:
 	}
 	
 	template <typename F>
-	void ForEach(K & key, F & functor)
+	void ForEach(K& key, F&& functor)
 	{
 		Super::Lock();
 
@@ -470,7 +470,7 @@ public:
 	}
 
 	template <typename F>
-	void ForEach(F & functor)
+	void ForEach(F&& functor)
 	{
 		Super::Lock();
 

@@ -66,7 +66,8 @@ bool RegisterPapyrusPlugin(F4SEPapyrusInterface::RegisterFunctions callback)
 
 void GetExternalEventRegistrations(const char * eventName, void * data, F4SEPapyrusInterface::RegistrantFunctor functor)
 {
-	g_externalEventRegs.ForEach(BSFixedString(eventName), [&functor, &data](const EventRegistration<ExternalEventParameters> & reg)
+	auto event{BSFixedString(eventName)};
+	g_externalEventRegs.ForEach(event, [&functor, &data](const EventRegistration<ExternalEventParameters> & reg)
 	{
 		functor(reg.handle, reg.scriptName.c_str(), reg.params.callbackName.c_str(), data);
 	});

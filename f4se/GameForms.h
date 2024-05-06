@@ -863,7 +863,7 @@ public:
 		BSFixedString	bone;		// 00
 		float			* value;	// 08
 
-		bool operator==(const BSFixedString a_key) const	{ return bone.data == a_key.data; }
+		bool operator==(const BSFixedString& a_key) const { return bone.data == a_key.data; }
 		static inline UInt32 GetHash(const BSFixedString * key)
 		{
 			UInt32 hash;
@@ -1061,8 +1061,8 @@ public:
 		UInt32				unk14;				// 14
 
 		operator BSFixedString() const						{ return source; }
-		bool operator==(const BSFixedString a_name) const	{ return source == a_name; }
-		static inline UInt32 GetHash(BSFixedString * key)
+		bool operator==(const BSFixedString& a_name) const	{ return source == a_name; }
+		static inline UInt32 GetHash(BSFixedString* key)
 		{
 			UInt32 hash;
 			CalculateCRC32_64(&hash, (UInt64)key->data, 0);

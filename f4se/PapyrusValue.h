@@ -89,7 +89,7 @@ public:
 		UInt32				index;			// 08
 
 		bool operator==(const MemberItem & rhs) const	{ return name == rhs.name; }
-		bool operator==(const BSFixedString a_name) const	{ return name == a_name; }
+		bool operator==(const BSFixedString& a_name) const	{ return name == a_name; }
 		operator UInt64() const								{ return (UInt64)name.data->Get<char>(); }
 
 		static inline UInt32 GetHash(BSFixedString * key)

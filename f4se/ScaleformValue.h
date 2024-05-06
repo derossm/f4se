@@ -209,10 +209,11 @@ public:
 	SInt32			GetInt(void) const;
 	UInt32			GetUInt(void) const;
 
-	bool	HasMember(const char * name);
-	bool	SetMember(const char * name, GFxValue * value);
-	bool	GetMember(const char * name, GFxValue * value);
-	bool	Invoke(const char * name, GFxValue * result, GFxValue * args, UInt32 numArgs);
+	bool	HasMember(const char* name);
+	bool	SetMember(const char* name, GFxValue&& value);
+	bool	SetMember(const char* name, GFxValue* value);
+	bool	GetMember(const char* name, GFxValue* value);
+	bool	Invoke(const char* name, GFxValue* result, GFxValue* args, UInt32 numArgs);
 
 	bool	CreateEmptyMovieClip(GFxValue* pValue, const char* instanceName, SInt32 depth);
 	bool	AttachMovie(GFxValue* pValue, const char* symbolName, const char* instanceName, SInt32 depth, const void * initArgs);

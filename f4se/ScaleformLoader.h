@@ -5,6 +5,8 @@
 
 #include "f4se/ScaleformState.h"
 
+class NiTexture;
+
 class GImageInfoBase;
 class IMenu;
 class GFxMovieView;
